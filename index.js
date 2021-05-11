@@ -13,7 +13,7 @@ PREFIX = config.prefix;
 
 //Welcome & goodbye messages\\
 client.on('guildMemberAdd', member => {
-    member.roles.add(member.guild.roles.cache.find(i => i.name === 'Among The Server'))
+    member.roles.add(member.guild.roles.cache.find(i => i.name === '736874356738752585'))
 
     const welcomeEmbed = new Discord.MessageEmbed()
 
@@ -33,27 +33,37 @@ client.on('guildMemberRemove', member => {
     member.guild.channels.cache.find(i => i.name === 'greetings').send(goodbyeEmbed)
 })
 //Welcome & goodbye messages end\\
+client.on('guildMemberAdd', member => {
 
+    const channel = member.guild.channels.cache.find(ch => ch.name === '736874356738752585');
+    if (!channel) console.log("channel bokuno pick");;
+    
+    channel.send(`Welcome to the server, ${member}`);
+});
 
 
 //get user id
 client.on('message', msg => {
     if (msg.content === `${PREFIX}testme`) {
         var userId = msg.author.id;
-        msg.channel.send(userId);
+        var userUsername = msg.author.username;
+        var userTag = msg.author.tag;
+        var userAvatar = msg.author.displayAvatarURL();
+
+        msg.channel.send(`
+        userId: ${userId}\n
+        userUsername: ${userUsername}\n
+        userTag: ${userTag}\n
+        userAvatar: ${userAvatar}\n`);
+        
     }
 });
 
 
-//---------test for welcome message-------------
+//---------test message-------------
 client.on('message', msg => {
-    if (msg.content === `${PREFIX}wel`) {
-        const channel = member.guild.channels.cache.find((ch) => ch.id === '760155618077835294');
-        if (!channel) {
-            console.log("no channel");
-            return;
-        }
-        channel.send(`Welcome to the server, ${member}!`);
+    if (msg.content === `${PREFIX}test`) {
+        msg.channel.send(`Your test output: ${msg.author.lastMessageID}!`);
     }
 });
 
