@@ -8,36 +8,13 @@ const client = new Discord.Client();
 PREFIX = config.prefix;
 
 
-//Main code goes here
+//------------------Main code goes here-----------------------
 
 
-//Welcome & goodbye messages\\
+//Welcome
 client.on('guildMemberAdd', member => {
-    member.roles.add(member.guild.roles.cache.find(i => i.name === '736874356738752585'))
-
-    const welcomeEmbed = new Discord.MessageEmbed()
-
-    welcomeEmbed.setColor('#5cf000')
-    welcomeEmbed.setTitle('**' + member.user.username + '** is now Among Us other **' + member.guild.memberCount + '** people')
-    welcomeEmbed.setImage('https://cdn.mos.cms.futurecdn.net/93GAa4wm3z4HbenzLbxWeQ-650-80.jpg.webp')
-
-    member.guild.channels.cache.find(i => i.name === 'greetings').send(welcomeEmbed)
-})
-client.on('guildMemberRemove', member => {
-    const goodbyeEmbed = new Discord.MessageEmbed()
-
-    goodbyeEmbed.setColor('#f00000')
-    goodbyeEmbed.setTitle('**' + member.user.username + '** was not the impostor there are **' + member.guild.memberCount + '** left Among Us')
-    goodbyeEmbed.setImage('https://gamewith-en.akamaized.net/article/thumbnail/rectangle/22183.png')
-
-    member.guild.channels.cache.find(i => i.name === 'greetings').send(goodbyeEmbed)
-})
-//Welcome & goodbye messages end\\
-client.on('guildMemberAdd', member => {
-
-    const channel = member.guild.channels.cache.find(ch => ch.name === '736874356738752585');
+    const channel = member.guild.channels.cache.find(ch => ch.id === '736874356738752585');
     if (!channel) console.log("channel bokuno pick");;
-    
     channel.send(`Welcome to the server, ${member}`);
 });
 
@@ -68,10 +45,13 @@ client.on('message', msg => {
 });
 
 
+
 //Console-log when bot run's success
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
+
+
 
 //Bot token key goes here
 client.login(config.BOT_TOKEN);
