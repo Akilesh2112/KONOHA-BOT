@@ -8,7 +8,10 @@ const {
 //declaring the instance 
 const client = new Discord.Client();
 PREFIX = config.prefix;
-const clientMongo = new MongoClient(config.uri);
+const clientMongo = new MongoClient(config.uri,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 
 
 
@@ -33,7 +36,6 @@ client.on('guildMemberAdd', member => {
 
 
     //----------------Uploading New User Details To Database----------------------
-
     //Mongodb connection 
 
     async function run() {
