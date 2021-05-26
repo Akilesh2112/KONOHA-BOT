@@ -8,10 +8,10 @@ const {
 //declaring the instance 
 const client = new Discord.Client();
 PREFIX = config.prefix;
-const clientMongo = new MongoClient(config.uri,{
+const clientMongo = new MongoClient(config.uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  });
+});
 
 
 
@@ -23,17 +23,7 @@ const clientMongo = new MongoClient(config.uri,{
 //Welcome
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(ch => ch.id === '736874356738752585');
-    if (!channel) console.log("channel bokuno pico");
-
-    channel.send(`Welcome to the server, ${member}`);
-    channel.send(`${member.id}`);
-    channel.send(`${member.user.username}`);
-    channel.send(`${member.user.tag}`);
-    channel.send(`${member.user.displayAvatarURL()}`);
-
-
-
-
+    if (!channel) console.log("**Channel not found check your channel id**");
 
     //----------------Uploading New User Details To Database----------------------
     //Mongodb connection 
@@ -50,7 +40,8 @@ client.on('guildMemberAdd', member => {
                 userId: member.id,
                 userUsername: member.user.username,
                 userTag: member.user.tag,
-                userAvatar: member.user.displayAvatarURL()
+                userAvatar: member.user.displayAvatarURL(),
+                userjoinedTime: Date()
             };
             const result = await userCollection.insertOne(details);
             console.log(
@@ -64,16 +55,44 @@ client.on('guildMemberAdd', member => {
             console.log(quotesCollection);
         } catch {
             console.error();
-        }
+        } 
+    }
+    run().catch(console.dir);
+});
+
+
+client.on('guildMemberRemove', member => {
+    const channel = member.guild.channels.cache.find(ch => ch.id === '736874356738752585');
+    if (!channel) console.log("**Channel not found check your channel id**");
+    channel.send(`Good bye${member}`);
+
+
+    async function run() {
+        try {
+            // Connect the client to the server
+            await clientMongo.connect();
+
+            const db = clientMongo.db('Data')
+            const userCollection = db.collection('userDetails')
+
+            details = {
+                userId: member.id
+            };
+            const result = await userCollection.deleteOne(details);
+            console.log(
+                `${result.deletedCount} documents were deleted`,
+            );
+
+            // Establish and verify connection
+            console.log("Connected successfully to server");
+            console.log(quotesCollection);
+        } catch {
+            console.error();
+        } 
     }
     run().catch(console.dir);
 
-
-
-
-
-});
-
+})
 
 //get user id
 client.on('message', msg => {
@@ -121,12 +140,15 @@ client.on('message', msg => {
 
 
 
+
+
+
+
+
 //Console-log when bot run's success
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
-
-
 
 //Bot token key goes here
 client.login(config.BOT_TOKEN);
